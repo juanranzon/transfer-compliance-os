@@ -9,15 +9,7 @@ import SolidarityResultCard from "../components/ui/SolidarityResultCard";
 export default function Home() {
   const [result, setResult] = useState<number | null>(null);
 
-  // Función que maneja el cálculo
-  const handleCalculate = (data: {
-    playerName: string;
-    birthDate: string;
-    transferDate: string;
-    transferAmount: number;
-  }) => {
-    // Ejemplo simple: 5% del monto de transferencia
-    const solidarityPayment = data.transferAmount * 0.05;
+  const handleCalculate = (solidarityPayment: number) => {
     setResult(solidarityPayment);
   };
 
