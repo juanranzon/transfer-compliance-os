@@ -1,29 +1,31 @@
 import { NextResponse } from 'next/server';
 import pdf from 'pdf-parse';
-import { detectRisks } from '@/lib/riskDetection';
-import { Buffer } from 'buffer';
-
-export const runtime = 'nodejs';
-
-export async function POST(req: Request) {
+// import { detectRisks } from '@/lib/riskDetection'; // Comentar temporalmente
+export async function POST(request: Request) {
   try {
-    const formData = await req.formData();
-    const pdfFile = formData.get('pdfFile');
+    const formData = await request.formData();
+    const pdfFile = formData.get('pdfFile') as File;
 
-    if (!pdfFile || !(pdfFile instanceof File)) {
-      return NextResponse.json({ error: 'No se ha subido ningún archivo PDF.' }, { status: 400 });
+    if (!pdfFile) {
+      return NextResponse.json({ error: 'No se proporcionó archivo PDF' }, { status: 400 });
     }
+    const bytes = await pdfFile.arrayBuffer();
+    const buffer = Buffer.from(bytes);
 
-    const fileBuffer = Buffer.from(await pdfFile.arrayBuffer());
-    const data = await pdf(fileBuffer);
-    
-    const extractedText = data.text;
-    const risks = detectRisks(extractedText);
-    
-    return NextResponse.json({ text: extractedText, risks: risks }, { status: 200 });
+    const data = await pdf(buffer);
 
+    // Temporal: usar array vacío en lugar de detectRisks
+    const risks: string[] = [];
+
+    return NextResponse.json({
+      text: data.text,
+      risks: risks
+    });
   } catch (error) {
-    console.error('Error al procesar el PDF:', error);
-    return NextResponse.json({ error: 'Error interno del servidor.' }, { status: 500 });
+    console.error('Error processing PDF:', error);
+    return NextResponse.json(
+      { error: 'Error al procesar el archivo PDF' },
+      { status: 500 }
+    );
   }
 }
