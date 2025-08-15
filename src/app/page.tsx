@@ -1,15 +1,10 @@
-import Header from '@/components/layout/Header';
-import Footer from '@/components/layout/Footer';
-import SolidarityForm from '@/components/forms/SolidarityForm';
-
 export default function Home() {
   return (
-    <div className="bg-gray-50 min-h-screen flex flex-col">
-      <Header />
-      <main className="flex-1">
-        <SolidarityForm />
-      </main>
-      <Footer />
+    <div className="bg-gray-50 min-h-screen p-8">
+      <h1 className="text-3xl font-bold text-gray-900 mb-6">
+        Transfer Compliance OS
+      </h1>
+      <p>Aplicación en construcción...</p>
     </div>
   );
 }
