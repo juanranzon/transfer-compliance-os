@@ -1,85 +1,97 @@
 'use client';
+
 import { useState } from 'react';
+
 export default function UploadForm() {
   const [file, setFile] = useState<File | null>(null);
   const [extractedText, setExtractedText] = useState<string>('');
   const [risks, setRisks] = useState<string[]>([]);
-  const [isLoading, setIsLoading] = useState<boolean>(false);
-  const [error, setError] = useState<string | null>(null);
+  const [loading, setLoading] = useState<boolean>(false);
+  const [error, setError] = useState<string>('');
+
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files) {
       setFile(e.target.files[0]);
     }
   };
+
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     if (!file) {
-      setError('Por favor, selecciona un archivo PDF.');
+      setError('Por favor, seleccione un archivo PDF.');
       return;
     }
-    setIsLoading(true);
-    setError(null);
+
+    setLoading(true);
+    setError('');
+    setExtractedText('');
+    setRisks([]);
+
     const formData = new FormData();
     formData.append('pdfFile', file);
+
     try {
       const response = await fetch('/api/upload', {
         method: 'POST',
         body: formData,
       });
+
       if (!response.ok) {
         throw new Error('Error al procesar el archivo. Inténtalo de nuevo.');
       }
+
       const data = await response.json();
       setExtractedText(data.text);
-      setRisks(data.risks); // Guardamos la lista de riesgos
+      setRisks(data.risks);
 
     } catch (err: any) {
       setError(err.message);
     } finally {
-      setIsLoading(false);
+      setLoading(false);
     }
   };
+
   return (
-    <div className="container mx-auto p-4 md:p-8">
-      <h1 className="text-3xl font-bold text-gray-900 mb-6">Analizador de Contratos</h1>
-      <form onSubmit={handleSubmit} className="bg-white p-6 rounded-lg shadow-md mb-8">
-        <div className="mb-4">
-          <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="pdf-file">
-            Subir Contrato (PDF)
-          </label>
+    <div className="max-w-4xl mx-auto p-8 bg-white shadow-md rounded-lg mt-8">
+      <h2 className="text-2xl font-bold text-center mb-6">Analizador de Contratos</h2>
+      <form onSubmit={handleSubmit} className="space-y-4">
+        <div>
+          <label className="block text-sm font-medium text-gray-700">Subir Contrato (PDF)</label>
           <input
             type="file"
-            id="pdf-file"
             accept="application/pdf"
             onChange={handleFileChange}
-            className="w-full text-gray-700 border rounded py-2 px-3 leading-tight focus:outline-none focus:shadow-outline"
+            className="mt-1 block w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100"
           />
         </div>
         <button
           type="submit"
-          disabled={isLoading}
-          className={`w-full bg-green-500 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline transition-colors duration-200 ${
-          isLoading ? 'bg-gray-400 cursor-not-allowed' : 'hover:bg-green-600'
-            }`}
+          disabled={loading}
+          className="w-full py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 disabled:opacity-50"
         >
-          {isLoading ? 'Procesando...' : 'Analizar Contrato'}
+          {loading ? 'Analizando...' : 'Analizar Contrato'}
         </button>
-        {error && <p className="text-red-500 text-xs italic mt-4">{error}</p>}
       </form>
+
+      {error && (
+        <p className="mt-4 text-center text-sm font-medium text-red-600">{error}</p>
+      )}
+
       {risks.length > 0 && (
-        <div className="bg-red-50 p-6 rounded-lg shadow-md mb-8">
-          <h2 className="text-xl font-semibold mb-4 text-red-700">Riesgos Detectados:</h2>
-          <ul className="list-disc list-inside text-sm text-red-800">
+        <div className="mt-8 p-4 bg-red-50 border-l-4 border-red-400">
+          <h3 className="text-lg font-bold text-red-800">Riesgos Detectados:</h3>
+          <ul className="mt-2 list-disc list-inside text-red-700">
             {risks.map((risk, index) => (
               <li key={index}>{risk}</li>
             ))}
           </ul>
         </div>
       )}
+
       {extractedText && (
-        <div className="bg-gray-100 p-6 rounded-lg shadow-md">
-          <h2 className="text-xl font-semibold mb-4">Texto Extraído:</h2>
-          <p className="whitespace-pre-wrap text-sm text-gray-800">{extractedText}</p>
+        <div className="mt-8">
+          <h3 className="text-lg font-bold text-gray-900">Texto Extraído:</h3>
+          <p className="mt-2 text-sm text-gray-600 whitespace-pre-wrap">{extractedText}</p>
         </div>
       )}
     </div>
