@@ -5,6 +5,7 @@ import { useState } from 'react';
 export default function UploadForm() {
   const [file, setFile] = useState<File | null>(null);
   const [extractedText, setExtractedText] = useState<string>('');
+  const [risks, setRisks] = useState<string[]>([]);
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [error, setError] = useState<string | null>(null);
 
@@ -39,6 +40,8 @@ export default function UploadForm() {
 
       const data = await response.json();
       setExtractedText(data.text);
+      setRisks(data.risks); // Guardamos la lista de riesgos
+      
     } catch (err: any) {
       setError(err.message);
     } finally {
@@ -73,6 +76,17 @@ export default function UploadForm() {
         </button>
         {error && <p className="text-red-500 text-xs italic mt-4">{error}</p>}
       </form>
+
+      {risks.length > 0 && (
+        <div className="bg-red-50 p-6 rounded-lg shadow-md mb-8">
+          <h2 className="text-xl font-semibold mb-4 text-red-700">Riesgos Detectados:</h2>
+          <ul className="list-disc list-inside text-sm text-red-800">
+            {risks.map((risk, index) => (
+              <li key={index}>{risk}</li>
+            ))}
+          </ul>
+        </div>
+      )}
 
       {extractedText && (
         <div className="bg-gray-100 p-6 rounded-lg shadow-md">
