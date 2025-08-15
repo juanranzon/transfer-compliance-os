@@ -1,6 +1,6 @@
 import { NextResponse } from 'next/server';
 import pdf from 'pdf-parse';
-import { detectRisks } from '@/lib/riskDetection';
+import { detectRisks } from '../../../lib/riskDetection';
 import { Buffer } from 'buffer';
 
 export const runtime = 'nodejs';
@@ -23,7 +23,7 @@ export async function POST(req: Request) {
     // 1. Extraemos el texto del PDF
     const extractedText = data.text;
 
-    // 2. Usamos nuestra función para detectar riesgos
+    // 2. Usamos nuestra función de detección de riesgos
     const risks = detectRisks(extractedText);
 
     // Retornamos tanto el texto como los riesgos detectados
@@ -31,7 +31,6 @@ export async function POST(req: Request) {
       { text: extractedText, risks: risks },
       { status: 200 }
     );
-
   } catch (error) {
     console.error('Error al procesar el PDF:', error);
     return NextResponse.json(
@@ -40,3 +39,4 @@ export async function POST(req: Request) {
     );
   }
 }
+
