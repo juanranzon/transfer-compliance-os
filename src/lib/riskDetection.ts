@@ -7,6 +7,7 @@ const tpoKeywords = [
   'terceros sobre los derechos',
 ];
 
+// Función que recibe texto y devuelve lista de riesgos detectados
 export function detectRisks(text: string): string[] {
   if (!text) {
     return [];
