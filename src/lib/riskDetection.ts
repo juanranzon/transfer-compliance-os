@@ -1,19 +1,26 @@
+// Define las palabras clave o frases que indican riesgo de TPO (Third-Party Ownership)
+const tpoKeywords = [
+  'terceros',
+  'inversión',
+  'porcentaje de una futura venta',
+  'derechos económicos',
+  'terceros sobre los derechos',
+];
+
 export function detectRisks(text: string): string[] {
-  const risks: string[] = [];
-  const lowercaseText = text.toLowerCase();
-  
-  // Detectar términos de riesgo básicos
-  const riskPatterns = [
-    { pattern: /penalti|multa|sanción/i, message: "Se detectaron cláusulas de penalización" },
-    { pattern: /terminación|rescisión/i, message: "Cláusulas de terminación del contrato" },
-    { pattern: /exclusión|limitación de responsabilidad/i, message: "Limitaciones de responsabilidad" },
-  ];
-  
-  riskPatterns.forEach(({ pattern, message }) => {
-    if (pattern.test(text)) {
-      risks.push(message);
+  if (!text) {
+    return [];
+  }
+
+  const detectedRisks: string[] = [];
+  const lowerText = text.toLowerCase();
+
+  tpoKeywords.forEach(keyword => {
+    if (lowerText.includes(keyword.toLowerCase())) {
+      const riskMessage = `Riesgo de Propiedad de Terceros (TPO) detectado con la frase: "${keyword}"`;
+      detectedRisks.push(riskMessage);
     }
   });
-  
-  return risks;
+
+  return detectedRisks;
 }
