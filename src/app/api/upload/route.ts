@@ -1,6 +1,6 @@
 import { NextResponse } from 'next/server';
 import pdf from 'pdf-parse';
-import { detectRisks } from '@/lib/riskDetection';
+import { detectRisks } from '@/lib/riskDetection';  // Sin extensión .ts
 
 // La nueva sintaxis para la configuración
 export const runtime = 'nodejs';
