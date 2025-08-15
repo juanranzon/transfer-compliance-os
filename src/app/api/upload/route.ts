@@ -1,31 +1,33 @@
 import { NextResponse } from 'next/server';
 import pdf from 'pdf-parse';
-// import { detectRisks } from '@/lib/riskDetection'; // Comentar temporalmente
-export async function POST(request: Request) {
+import { detectRisks } from '@/lib/riskDetection';
+import { Buffer } from 'buffer';
+
+export const runtime = 'nodejs';
+
+export async function POST(req: Request) {
   try {
-    const formData = await request.formData();
-    const pdfFile = formData.get('pdfFile') as File;
+    const formData = await req.formData();
+    const pdfFile = formData.get('pdfFile');
 
-    if (!pdfFile) {
-      return NextResponse.json({ error: 'No se proporcionó archivo PDF' }, { status: 400 });
+    if (!pdfFile || !(pdfFile instanceof File)) {
+      return NextResponse.json({ error: 'No se ha subido ningún archivo PDF.' }, { status: 400 });
     }
-    const bytes = await pdfFile.arrayBuffer();
-    const buffer = Buffer.from(bytes);
 
-    const data = await pdf(buffer);
+    const fileBuffer = Buffer.from(await pdfFile.arrayBuffer());
+    const data = await pdf(fileBuffer);
+    
+    // 1. Extraemos el texto del PDF
+    const extractedText = data.text;
 
-    // Temporal: usar array vacío en lugar de detectRisks
-    const risks: string[] = [];
+    // 2. Usamos nuestra función de IA para detectar riesgos
+    const risks = detectRisks(extractedText);
+    
+    // Retornamos tanto el texto como los riesgos detectados
+    return NextResponse.json({ text: extractedText, risks: risks }, { status: 200 });
 
-    return NextResponse.json({
-      text: data.text,
-      risks: risks
-    });
   } catch (error) {
-    console.error('Error processing PDF:', error);
-    return NextResponse.json(
-      { error: 'Error al procesar el archivo PDF' },
-      { status: 500 }
-    );
+    console.error('Error al procesar el PDF:', error);
+    return NextResponse.json({ error: 'Error interno del servidor.' }, { status: 500 });
   }
 }
