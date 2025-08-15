@@ -1,9 +1,10 @@
 import "./globals.css";
 import Header from "../components/layout/Header";
+import Footer from "../components/layout/Footer";  // ← Agregar esta línea
 
 export const metadata = {
   title: "Transfer Compliance OS",
-  description: "Calculadora de pago de solidaridad para transferencias de jugadores",
+  description: "Sistema de verificación de cumplimiento de transferencias",
 };
 
 export default function RootLayout({
@@ -13,7 +14,7 @@ export default function RootLayout({
 }) {
   return (
     <html lang="es">
-      <body className="flex flex-col min-h-screen">
+      <body className="flex flex-col min-h-screen bg-gray-100">
         <Header />
         <main className="flex-grow">{children}</main>
         <Footer />
