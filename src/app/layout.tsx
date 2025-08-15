@@ -1,14 +1,22 @@
 import "./globals.css";
-import type { ReactNode } from "react";
-import Header from "../components/Header";
-import Footer from "../components/Footer";
+import Header from "@/components/layout/Header";
+import Footer from "@/components/layout/Footer";
 
-export default function RootLayout({ children }: { children: ReactNode }) {
+export const metadata = {
+  title: "Transfer Compliance OS",
+  description: "Calculadora de pago de solidaridad para transferencias de jugadores",
+};
+
+export default function RootLayout({
+  children,
+}: {
+  children: React.ReactNode;
+}) {
   return (
     <html lang="es">
-      <body>
+      <body className="flex flex-col min-h-screen">
         <Header />
-        <main className="min-h-screen">{children}</main>
+        <main className="flex-grow">{children}</main>
         <Footer />
       </body>
     </html>
