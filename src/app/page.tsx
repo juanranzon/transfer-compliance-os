@@ -1,16 +1,27 @@
-// src/app/page.tsx
-import Header from '@/components/Header';
-import Footer from '@/components/Footer';
-import UploadForm from '@/components/UploadForm';
-
-export default function Home() {
-  return (
-    <div className="bg-gray-50 min-h-screen flex flex-col">
-      <Header />
-      <main className="flex-1">
-        <UploadForm />
-      </main>
-      <Footer />
-    </div>
-  );
+{
+  "compilerOptions": {
+    "lib": ["dom", "dom.iterable", "esnext"],
+    "allowJs": true,
+    "skipLibCheck": true,
+    "strict": true,
+    "noEmit": true,
+    "esModuleInterop": true,
+    "module": "esnext",
+    "moduleResolution": "bundler",
+    "resolveJsonModule": true,
+    "isolatedModules": true,
+    "jsx": "preserve",
+    "incremental": true,
+    "plugins": [
+      {
+        "name": "next"
+      }
+    ],
+    "paths": {
+      "@/*": ["./src/*"]
+    },
+    "baseUrl": "."
+  },
+  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx"],
+  "exclude": ["node_modules"]
 }
