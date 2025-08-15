@@ -1,18 +1,17 @@
 "use client";
-
-import Header from "@/components/layout/Header";
-import Footer from "@/components/layout/Footer";
-import SolidarityForm from "@/components/forms/SolidarityForm";
-import SolidarityResultCard from "@/components/ui/SolidarityResultCard";
+import Header from "../components/layout/Header";
+import Footer from "../components/layout/Footer";
+import SolidarityForm from "../components/forms/SolidarityForm";
+import SolidarityResultCard from "../components/ui/SolidarityResultCard";
 import { useState } from "react";
 
 export default function HomePage() {
   const [result, setResult] = useState<number | null>(null);
-
+  
   const handleCalculate = (value: number) => {
     setResult(value);
   };
-
+  
   return (
     <>
       <Header />
