@@ -58,9 +58,9 @@ export default function UploadForm() {
         <button
           type="submit"
           disabled={isLoading}
-          className={w-full bg-green-500 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline transition-colors duration-200 ${
+          className={`w-full bg-green-500 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline transition-colors duration-200 ${
             isLoading ? 'bg-gray-400 cursor-not-allowed' : 'hover:bg-green-600'
-          }}
+          }`}
         >
           {isLoading ? 'Procesando...' : 'Analizar Contrato'}
         </button>
