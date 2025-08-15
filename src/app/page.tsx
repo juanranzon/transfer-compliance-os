@@ -1,7 +1,7 @@
 // src/app/page.tsx
-import Header from '../components/Header';
-import Footer from '../components/Footer';
-import UploadForm from '../components/UploadForm';
+import Header from '@/components/Header';
+import Footer from '@/components/Footer';
+import UploadForm from '@/components/UploadForm';
 
 export default function Home() {
   return (
