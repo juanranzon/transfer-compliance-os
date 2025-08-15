@@ -2,11 +2,8 @@ import { NextResponse } from 'next/server';
 import pdf from 'pdf-parse';
 import { detectRisks } from '@/lib/riskDetection';
 
-export const config = {
-  api: {
-    bodyParser: false,
-  },
-};
+// La nueva sintaxis para la configuración
+export const runtime = 'nodejs';
 
 export async function POST(req: Request) {
   try {
